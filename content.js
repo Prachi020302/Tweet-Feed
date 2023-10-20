@@ -58,11 +58,17 @@
 // });
 
 function fetchOriginalTweet() {
-  const tweetTextElement = document.querySelector('div[data-testid="tweet"] div[lang]');
-  
-  if (tweetTextElement) {
-    const originalTweetText = tweetTextElement.innerText;
-    alert(originalTweetText);
+  const replyField = document.querySelector('div[aria-label="Add a comment…"]');
+  if (replyField) {
+    const originalTweetText = document.querySelector('div[aria-label="Tweet text"]');
+    if (originalTweetText) {
+      const tweetText = originalTweetText.innerText;
+      
+      // Insert a delay (e.g., 2000 milliseconds = 2 seconds) before setting the reply field text
+      setTimeout(() => {
+        replyField.innerText = tweetText;
+      }, 2000); // Adjust the delay as needed
+    }
   }
 }
 
@@ -71,5 +77,34 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     fetchOriginalTweet();
   }
 });
+
+// Content Script (content.js)
+
+// Create an icon element
+const iconElement = document.createElement('img');
+iconElement.src = '\TweetFeed\images\icon-128.png'; // Replace with the actual path to your icon
+iconElement.classList.add('custom-icon-class'); // Add a custom class for styling
+
+function injectIcon() {
+  const replyField = document.querySelector('div[aria-label="Add a comment…"]');
+  if (replyField) {
+    replyField.appendChild(iconElement);
+  }
+}
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "fetchOriginalTweet") {
+    fetchOriginalTweet();
+    injectIcon(); // Inject your icon
+  }
+});
+
+document.addEventListener('input', function(event) {
+  const replyBox = event.target;
+  if (replyBox && replyBox.tagName === 'TEXTAREA') {
+    replyBox.value = 'Hello';
+  }
+});
+
 
 
