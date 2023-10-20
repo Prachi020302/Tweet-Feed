@@ -63,10 +63,10 @@ function fetchOriginalTweet() {
     const originalTweetText = document.querySelector('div[aria-label="Tweet text"]');
     if (originalTweetText) {
       const tweetText = originalTweetText.innerText;
-      
+
       // Insert a delay (e.g., 2000 milliseconds = 2 seconds) before setting the reply field text
       setTimeout(() => {
-        replyField.innerText = tweetText;
+        replyField.value = tweetText; // Use value for input fields
       }, 2000); // Adjust the delay as needed
     }
   }
@@ -82,7 +82,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // Create an icon element
 const iconElement = document.createElement('img');
-iconElement.src = '\TweetFeed\images\icon-128.png'; // Replace with the actual path to your icon
+iconElement.src = '/TweetFeed/images/icon-128.png'; // Use forward slashes and proper path
 iconElement.classList.add('custom-icon-class'); // Add a custom class for styling
 
 function injectIcon() {
@@ -105,6 +105,7 @@ document.addEventListener('input', function(event) {
     replyBox.value = 'Hello';
   }
 });
+
 
 
 
